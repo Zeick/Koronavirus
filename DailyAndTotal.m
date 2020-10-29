@@ -1,12 +1,14 @@
 % GET NUMBER OF DAILY/TOTAL INFECTIONS/DEATHS FROM MULTIPLE COUNTRIES
-function DailyAndTotal(valtiot,tyyppi,plotLinear,lowerBound,upperBound,useSubPlot)
+function DailyAndTotal(startDate,valtiot,tyyppi,plotLinear,lowerBound,upperBound,useSubPlot)
     global C;
     global nl;
     global kaikkiValtiot;
     global otsikot;
-    if nargin < 3
+    global paivat;
+    cpuStart = cputime;
+    if nargin < 4
         plotLinear = false;
-    elseif nargin < 6
+    elseif nargin < 7
         useSubPlot = false;
     end
     first = true;
@@ -21,13 +23,17 @@ function DailyAndTotal(valtiot,tyyppi,plotLinear,lowerBound,upperBound,useSubPlo
         end
         total = [];
         daily = [];
+        luku = 1;
         for j=2:nl
             temp = C{j}(kaikkiValtiot);
-            if valtio == string(temp{1})
-                total2 = str2double(string(C{j}(tyyppi)));
-                daily2 = str2double(string(C{j}(tyyppi + 2)));
-                total  = [total total2];
-                daily  = [daily daily2];
+            if valtio == string(temp{1})% && t >= datetime('2020-03-01')
+                t = datetime(string(C{j}(paivat)),'InputFormat','yyyy-MM-dd');
+                if t >= datetime(startDate)
+                    total2 = str2double(string(C{j}(tyyppi)));
+                    daily2 = str2double(string(C{j}(tyyppi + 2)));
+                    total  = [total total2];
+                    daily  = [daily daily2];
+                end
             end
         end
         maxLKM = max(maxLKM,max(daily));
@@ -47,11 +53,11 @@ function DailyAndTotal(valtiot,tyyppi,plotLinear,lowerBound,upperBound,useSubPlo
         else
             plot(total,daily,lstyle,'LineWidth',2);
         end
-        fprintf('Calculating %30s\n',valtio);
+        fprintf('Calculating %20s (%.2f s elapsed)\n',valtio,cputime-cpuStart);
     end
     set(gca,'FontSize',15);
-    xlim([10, totLKM]);
-    if nargin < 5
+    xlim([0.1, totLKM]);
+    if nargin < 6
         lowerBound = 1;
         upperBound = 1.1*maxLKM;
     end
