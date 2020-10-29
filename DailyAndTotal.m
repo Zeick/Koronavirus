@@ -1,5 +1,5 @@
 % GET NUMBER OF DAILY/TOTAL INFECTIONS/DEATHS FROM MULTIPLE COUNTRIES
-function DailyAndTotal(startDate,valtiot,tyyppi,plotLinear,lowerBound,upperBound,useSubPlot)
+function DailyAndTotal(startDate,valtiot,tyyppi,plotLinear,lowerBoundX,lowerBoundY,upperBoundY,useSubPlot)
     global C;
     global nl;
     global kaikkiValtiot;
@@ -8,7 +8,7 @@ function DailyAndTotal(startDate,valtiot,tyyppi,plotLinear,lowerBound,upperBound
     cpuStart = cputime;
     if nargin < 4
         plotLinear = false;
-    elseif nargin < 7
+    elseif nargin < 8
         useSubPlot = false;
     end
     first = true;
@@ -23,7 +23,6 @@ function DailyAndTotal(startDate,valtiot,tyyppi,plotLinear,lowerBound,upperBound
         end
         total = [];
         daily = [];
-        luku = 1;
         for j=2:nl
             temp = C{j}(kaikkiValtiot);
             if valtio == string(temp{1})% && t >= datetime('2020-03-01')
@@ -56,18 +55,27 @@ function DailyAndTotal(startDate,valtiot,tyyppi,plotLinear,lowerBound,upperBound
         fprintf('Calculating %20s (%.2f s elapsed)\n',valtio,cputime-cpuStart);
     end
     set(gca,'FontSize',15);
-    xlim([0.1, totLKM]);
+    
+    % Here we determine the lower and upper bound for the axes
+    % Case "-1" means indecision, reset to default value "1".
+    % First, X-coordinate
     if nargin < 6
-        lowerBound = 1;
-        upperBound = 1.1*maxLKM;
+        lowerBoundX = 1;
+    elseif lowerBoundX == -1
+        lowerBoundX = 1;
     end
-    if lowerBound == -1
-        lowerBound = 1;
+    if nargin < 7
+        lowerBoundY = 1;
+        upperBoundY = 1.1*maxLKM;
     end
-    if upperBound == -1
-        upperBound = 1.1*maxLKM;
+    if lowerBoundY == -1
+        lowerBoundY = 1;
     end
-    ylim([lowerBound upperBound]);
+    if upperBoundY == -1
+        upperBoundY = 1.1*maxLKM;
+    end
+    xlim([lowerBoundX, totLKM]);
+    ylim([lowerBoundY upperBoundY]);
     legend(valtiot,'Location','NorthWest'); 
     title(otsikot(tyyppi),'FontSize',20);
     xlabel('Kaikki tapaukset','FontSize',15);

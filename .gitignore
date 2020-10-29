@@ -3,6 +3,7 @@ Kuvia/*
 *.xlsx
 *.dat
 *.csv
+*.m~
 CoronaSuomi.m
 CoronaTHLTesti.m
 .DS_Store

@@ -203,16 +203,22 @@ plotType = plotExp;
 tyyppi = kaikkiSairaat;
 DailyAndTotal(startDate,valtiot,tyyppi,plotType);
 tyyppi = kaikkiKuolleet;
-DailyAndTotal(startDate,valtiot,tyyppi,plotType,1,3000);
+DailyAndTotal(startDate,valtiot,tyyppi,plotType,10,1,3000);
 
 %% SAMA, VÄKILUKUA KOHDEN
 valtiot = ["Finland","Sweden","Estonia","South Korea","Hungary","United States","Germany","Brazil","Russia","Spain","Italy","France","Chile","Japan"];
 startDate = '2020-03-10';
 plotType = plotExp;
 tyyppi = kaikkiSairaatPPM;
-DailyAndTotal(startDate,valtiot,tyyppi,plotType,1,600);
+lowerX = 10; lowerY = 0.1; upperY = 600;
+DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,lowerY,upperY);
+%%
+valtiot = ["Finland","Sweden","Estonia","South Korea","Hungary","United States","Germany","Brazil","Russia","Spain","Italy","France","Chile","Japan"];
+startDate = '2020-03-10';
+plotType = plotExp;
 tyyppi = kaikkiKuolleetPPM; 
-DailyAndTotal(startDate,valtiot,tyyppi,plotType,0.01,20);
+lowerX = 1; lowerY = 0.01; upperY = 20;
+DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,lowerY,upperY);
 %% LETHALITY OF VIRUS OVER TIME (DEATHS/CASES)
 startDate = '2020-03-07';
 kuolleisuus(valtiot,startDate);
