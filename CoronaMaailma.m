@@ -25,7 +25,7 @@ global kaikkiKuolleetPPM;
 global uudetKuolleetPPM;
 global kaikkiTestit;
 global uudetTestit;
-global kaikkiTestitTAS;
+global uudetTestitTAS;
 global kaikkiTestitPPT;
 global otsikot;
 global positiiviset;
@@ -63,37 +63,49 @@ uudetSairaatPPM   = 12; % 12    new_cases_per_million
 kaikkiKuolleetPPM = 14; % 14    total_deaths_per_million
 uudetKuolleetPPM  = 15; % 15    new_deaths_per_million
 % 16    new_deaths_smoothed_per_million
-kaikkiTestit      = 17; % 17    total_tests
-uudetTestit       = 18; % 18    new_tests
-kaikkiTestitTAS   = 19; % 19    new_tests_smoothed
-kaikkiTestitPPT   = 20; % 20    total_tests_per_thousand
-% 21    new_tests_per_thousand
-% 22    new_tests_smoothed_per_thousand
-% 23    tests_per_case
+% 17    icu_patients
+% 18    icu_patients_per_million
+% 19    hosp_patients
+% 20    hosp_patients_per_million
+% 21    weekly_icu_admissions
+% 22    weekly_icu_admissions_per_million
+% 23    weekly_hosp_admissions
+% 24    weekly_hosp_admissions_per_million
+kaikkiTestit      = 25; % 25    total_tests
+uudetTestit       = 26; % 26    new_tests
+uudetTestitTAS    = 27; % 27    new_tests_smoothed
+kaikkiTestitPPT   = 28; % 28    total_tests_per_thousand
+% 29    new_tests_per_thousand
+% 30    new_tests_smoothed_per_thousand
+% 31    tests_per_case
 positiiviset      = 24; % 24    positive_rate
-% 25    tests_units
-% 26    stringency_index
-% 27    population
-% 28    population_density
-% 29    median_age
-% 30    aged_65_older
-% 31    aged_70_older
-% 32    gdp_per_capita
-% 33    extreme_poverty
-% 34    cardiovasc_death_rate
-% 35    diabetes_prevalence
-% 36    female_smokers
-% 37    male_smokers
-% 38    handwashing_facilities
-% 39    hospital_beds_per_thousand
-% 40    life_expectancy
+% 33    tests_units
+% 34    stringency_index
+% 35    population
+% 36    population_density
+% 37    median_age
+% 38    aged_65_older
+% 39    aged_70_older
+% 40    gdp_per_capita
+% 41    extreme_poverty
+% 42    cardiovasc_death_rate
+% 43    diabetes_prevalence
+% 44    female_smokers
+% 45    male_smokers
+% 46    handwashing_facilities
+% 47    hospital_beds_per_thousand
+% 48    life_expectancy
+% 49    human_development_index
 otsikot = ["ISO","Maanosa","Valtio","Päiväys",...
     "Kaikki sairastuneet","Päivittäin sairastuneet","Päivittäinen sairastuneet (tasoitettu)",...
     "Kaikki kuolleet","Päivittäin kuolleet","Päivittäin kuolleet (tasoitettu)",...
     "Kaikki sairastuneet PPM","Päivittäin sairastuneet PPM","Päivittäin sairastuneet PPM (tasoitettu)",...
     "Kaikki kuolleet PPM","Päivittäin kuolleet PPM","Päivittäin kuolleet PPM (tasoitettu)",...
+    "All ICU patients","ICU patients PPM","Hospitalized","Hospitalized PPM",...
+    "Weekly new ICU patients","Weekly new ICU patients PPM","Weekly hospitalized","Postiivisten testien osuus",...
     "Kaikki testatut","Päivittäin testatut","Kaikki testatut (tasoitettu)",...
-    "Kaikki testatut (x1000)","Uudet testatut (x1000)"];
+    "Kaikki testatut PPT","Uudet testatut PPT", "Uudet testatut PPT (tasoitettu)",...
+    "Testejä tapausta kohti","Positiivisten testien osuus","Testiyksikkö"];
 plotLinear = true;
 plotExp = false;
 
@@ -105,11 +117,11 @@ plotExp = false;
 
 %% GET DATA FROM ONE COUNTRY
 % TODO: Valitse kaikki plotattavat tyypit graafiin, looppaa tyyppien yli
-%yksiValtio("World");
-yksiValtio("Finland");
-%yksiValtio("United States");
+yksiValtio("World");
+%yksiValtio("Finland");
+yksiValtio("United States");
 %yksiValtio("Sweden");
-yksiValtio("Hungary");
+%yksiValtio("Hungary");
 
 %% ONE COUNTRY SUMMARY, PART 1
 valtiot = ["Finland"];
@@ -127,16 +139,23 @@ tyyppi = uudetKuolleet;
 upperBound = 14;
 moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotType,upperBound,useSubPlot);
 
-%% ONE COUNTRY SUMMARY, PART 2
+%% PART 2
 valtiot = ["Finland"];
+startDate = '2020-03-17';
 plotType = plotLinear;
 tyyppi = kaikkiSairaat;
 useSubPlot = true;
 subplot(2,1,1);
-DailyAndTotal(valtiot,tyyppi,plotType,-1,-1,useSubPlot);
+lowerX = -1;
+lowerY = -1;
+upperY = -1;
+DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,lowerY,upperY,useSubPlot);
 tyyppi = kaikkiKuolleet;
 subplot(2,1,2);
-DailyAndTotal(valtiot,tyyppi,plotType,1,15,useSubPlot);
+lowerX = 1;
+lowerY = -1;
+upperY = 20;
+DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,lowerY,upperY,useSubPlot);
 
 
 %% GET NUMBER OF DAILY/TOTAL INFECTIONS/DEATHS FROM MULTIPLE COUNTRIES
@@ -165,7 +184,7 @@ tyyppi = uudetSairaat;
 moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotType);
 %valtiot = ["Finland","Sweden","Denmark","Norway","Estonia","Hungary","Netherlands","Belgium","Switzerland","Japan","South Korea"];
 tyyppi = uudetKuolleet;
-moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotType);
+moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotType,3000);
 
 %% AMOUNT OF DAILY/TOTAL CASES/DEATHS AFTER N CASES/DEATHS
 % This allows a better comparison, since then every country starts at the
@@ -189,33 +208,28 @@ plotType = plotLinear;
 minimumCases = 1;
 tyyppi = kaikkiSairaatPPM;
 afterNcases(valtiot,tyyppi,minimumCases,plotType,50000,18);
-%%
 % Bad data: Netherlands, Ireland, Iran, Iraq, Ecuador, Brazil
 tyyppi = kaikkiKuolleetPPM;
 valtiot = ["Peru", "Belgium", "United States", "Italy", "France", "Bolivia", "Spain", "Panama", "Colombia","Moldova","Sweden","Chile","India"];
 minimumCases = 1;
-afterNcases(valtiot,tyyppi,minimumCases,plotType,1100,36);
+afterNcases(valtiot,tyyppi,minimumCases,plotType,1100,37);
 
 %% PÄIVITTÄISET TAPAUKSET KOKONAISTAPAUSTEN FUNKTIONA, TASOITETTUNA
-valtiot = ["Finland","Sweden","Estonia","South Korea","Hungary","United States","Germany","Brazil","Russia","Spain","Italy","France","Chile","Japan"];
+valtiot = ["Finland","Brazil","Estonia","South Korea","Hungary","United States","Germany","Sweden","Russia","Spain","Italy","France","Chile","Japan"];
 startDate = '2020-01-01';
 plotType = plotExp;
 tyyppi = kaikkiSairaat;
-DailyAndTotal(startDate,valtiot,tyyppi,plotType);
+DailyAndTotal(startDate,valtiot,tyyppi,plotType,10,1,2e5);
 tyyppi = kaikkiKuolleet;
 DailyAndTotal(startDate,valtiot,tyyppi,plotType,10,1,3000);
 
 %% SAMA, VÄKILUKUA KOHDEN
-valtiot = ["Finland","Sweden","Estonia","South Korea","Hungary","United States","Germany","Brazil","Russia","Spain","Italy","France","Chile","Japan"];
+valtiot = ["Finland","Brazil","Estonia","South Korea","Hungary","United States","Germany","Sweden","Russia","Spain","Italy","France","Chile","Japan"];
 startDate = '2020-03-10';
 plotType = plotExp;
 tyyppi = kaikkiSairaatPPM;
-lowerX = 10; lowerY = 0.1; upperY = 600;
+lowerX = 10; lowerY = 0.1; upperY = 1000;
 DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,lowerY,upperY);
-%%
-valtiot = ["Finland","Sweden","Estonia","South Korea","Hungary","United States","Germany","Brazil","Russia","Spain","Italy","France","Chile","Japan"];
-startDate = '2020-03-10';
-plotType = plotExp;
 tyyppi = kaikkiKuolleetPPM; 
 lowerX = 1; lowerY = 0.01; upperY = 20;
 DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,lowerY,upperY);
@@ -226,6 +240,8 @@ kuolleisuus(valtiot,startDate);
 %% SAIRASTUNEIDEN OSUUS TESTATUISTA
 % Anomaalista dataa: Sweden, France, Brazil, Germany, Japan, Spain,
 % Argentina, Peru, Colombia
+
+% Ongelma! Pitää tasoittaa...
 startDate = '2020-03-20';
 valtiot = ["Finland","Estonia","Hungary","Italy","United Kingdom","India","Spain","Switzerland","Turkey","Belgium","Russia","Israel","United States","South Africa"];
 SairasOsuus(valtiot,startDate);
@@ -233,15 +249,32 @@ SairasOsuus(valtiot,startDate);
 
 %% VERRATAAN PÄIVITTÄIN KUOLLEITA SAIRASTUNEIDEN OSUUTEEN TESTATUISTA
 
-%valtiot = ["Hungary","Finland"];
-startDate = '2020-03-22';
+valtiot = "Finland";
+startDate = '2020-03-24';
 plotType = plotLinear;
 useSubPlot = true;
 tyyppi = uudetKuolleetTAS;
 subplot(2,1,2);
 moniValtio(valtiot,tyyppi,startDate,plotType,15,useSubPlot);
 subplot(2,1,1);
-SairasOsuus(valtiot,startDate)
+%SairasOsuus(valtiot,startDate)
+
+tyyppi = 20;
+p = 7;
+moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotType,100,useSubPlot);
+
+%% TESTAUSTA (onko 20 positive_rate? Ehkä 24 todennäköisemmin kun on < 1
+plotType = plotExp;
+moniValtio("Hungary",24,'2020-03-22',plotType);
+
+%%
+tyyppi = uudetSairaatTAS;
+startDate = '2020-03-01';
+SecondDerivative(7,"Finland",tyyppi,startDate);
+
+tyyppi = uudetKuolleet;
+SecondDerivative(7,"World",tyyppi);
+
 
 %%
 %%%%%%%%%% HERE EXPERIMENTAL STUFF %%%%%%%%%%
@@ -251,46 +284,3 @@ SairasOsuus(valtiot,startDate)
 % t0 = cputime;
 % kaikkiPaivat = laskePaivat();
 % fprintf(' ready. (%.2f s)\n', cputime-t0);
-
-%% TOINEN DERIVAATTA
-
-% valtio = "World";
-% tyyppi = uudetKuolleet - 1;
-% lkm = [];
-% t = [];
-% % Get the data for individual country
-% for j=2:nl
-%     temp = C{j}(2);
-%     if valtio == string(temp{1})
-%         t2 = datetime(string(C{j}(3)),'InputFormat','yyyy-MM-dd');
-%         lkm2 = str2double(string(C{j}(tyyppi)));
-%         t = [t t2];
-%         lkm = [lkm lkm2];
-%     end
-% end
-% % Calculate the second derivative
-% der = zeros(1,length(t)-1);
-% for j=2:length(t)
-%     der(j-1) = lkm(j)-lkm(j-1);
-% end
-% t = t(1:end-1);
-% 
-% % Next we calculate the p-day running mean to clean the data.
-% p = 7; % Should be odd.
-% runningLKM = zeros(1,length(der)-p+1);
-% for j=1:(length(der)-p+1)
-%    runningLKM(j) = 1/p*sum(der(j:j+p-1)); 
-% end
-% 
-% % Logarithmicity should be called only once.
-% % The time for running mean is cut short from both ends.
-% tRunning = t(1+(p-1)/2:end-(p-1)/2);
-% 
-% figure;
-% plot(t,der,'-b','LineWidth',1);
-% hold on;
-% plot(tRunning,runningLKM,'-r','LineWidth',2);
-% plot(t,zeros(1,length(t)),'-k','LineWidth',2);
-% title(otsikot(tyyppi),'FontSize',20);
-% legend(valtio,'Location','NorthWest','FontSize',15);
-% set(gca,'FontSize',15);

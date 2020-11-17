@@ -43,7 +43,7 @@ function moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotLinear,upperBound,use
         lkm = [];
         for j=2:nl
             temp = C{j}(kaikkiValtiot);
-            if valtio == string(temp{1})
+            if valtio == string(temp{1}) && length(C{j}) >= tyyppi
                 t2 = datetime(string(C{j}(paivat)),'InputFormat','yyyy-MM-dd');
                 lkm2  = str2double(string(C{j}(tyyppi)));
                 t = [t t2];
@@ -72,12 +72,12 @@ function moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotLinear,upperBound,use
             end
             hold on;
             fprintf('--------------------------------------------------------------------------\n');
-            fprintf('%30s | %11s | %11s |      Erotus |\n',otsikot(tyyppi),datestr(t(end)),datestr(t(end-1)));
+            fprintf('%31s | %11s | %11s |      Erotus |\n',otsikot(tyyppi),datestr(t(end)),datestr(t(end-1)));
             fprintf('--------------------------------------------------------------------------\n');
         else
             plot(tRunning,runningLKM,lstyle,'LineWidth',2);
         end
-        fprintf('%30s | %11d | %11d | %11d |\n',valtio,lkm(end),lkm(end-1),lkm(end)-lkm(end-1));
+        fprintf('%31s | %11d | %11d | %11d |\n',valtio,lkm(end),lkm(end-1),lkm(end)-lkm(end-1));
     end
     set(gca,'FontSize',15);
     xlim([datetime(startDate), t(end)]);

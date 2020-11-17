@@ -4,7 +4,6 @@ function SairasOsuus(valtiot,startDate,upperBound)
     global kaikkiValtiot;
     global paivat;
     global positiiviset;
-    global kaikkiTestitTAS
     k=0;
     lstyle = '-';
     fprintf('Positiivisten osuus testatuista|    Today    |  Yesterday  |      Erotus |\n');
@@ -18,7 +17,7 @@ function SairasOsuus(valtiot,startDate,upperBound)
         rate = [];
         for j=2:nl
             temp = C{j}(kaikkiValtiot);
-            if valtio == string(temp{1}) && size(C{j},2) > 23 
+            if valtio == string(temp{1}) && size(C{j},2) >= positiiviset 
                 t2 = datetime(string(C{j}(paivat)),'InputFormat','yyyy-MM-dd');
                 rate2 = str2double(string(C{j}(positiiviset)));
                 if rate2 < 1
@@ -30,11 +29,11 @@ function SairasOsuus(valtiot,startDate,upperBound)
         rate = 100*rate;
         plot(t,rate,lstyle,'LineWidth',2);
         hold on;
-        if isnumeric(rate(end)) && isnumeric(rate(end-1))
-            fprintf('%30s | %11g | %11g | %11g |\n',valtio,rate(end),rate(end-1),rate(end)-rate(end-1));
-        else
-            fprintf('%30s |             |             |             |\n',valtio);
-        end
+%        if isnumeric(rate(end)) && isnumeric(rate(end-1))
+%            fprintf('%31s | %11g | %11g | %11g |\n',valtio,rate(end),rate(end-1),rate(end)-rate(end-1));
+%        else
+%            fprintf('%31s |             |             |             |\n',valtio);
+%        end
     end
     set(gca,'FontSize',15);
     xlim([datetime(startDate), t(end)]);
