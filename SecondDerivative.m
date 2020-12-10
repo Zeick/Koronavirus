@@ -61,3 +61,5 @@ function SecondDerivative(p,valtio,tyyppi,startDate)
     title(otsikot(tyyppi),'FontSize',20);
     legend(valtio,'Location','NorthWest','FontSize',15);
     set(gca,'FontSize',15);
+    height = 700;
+    set(gcf,'position',[0,0,2.4*height,height]);

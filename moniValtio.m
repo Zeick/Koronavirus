@@ -12,7 +12,7 @@ function moniValtio(valtiot,tyyppi,startDate,plotLinear,upperBound,useSubPlot)
     elseif nargin == 3
         plotLinear = false;
         useSubPlot = false;
-    elseif nargin == 4
+    elseif nargin == 4 || nargin == 5
         useSubPlot = false;
     end
     first = true;

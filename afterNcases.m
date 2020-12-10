@@ -66,7 +66,7 @@ function afterNcases(valtiot,tyyppi,minimumCases,plotLinear,upperBound,afterN)
     end
     xlabel(['Päivää ', num2str(minimumCases), ' tapauksen jälkeen']);
     xlim([afterN maxLKM]);
-    if nargin == 5
+    if nargin >= 5
         ylim([minimumCases upperBound]);
     else
         yLimits = get(gca,'YLim');

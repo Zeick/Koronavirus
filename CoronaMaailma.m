@@ -119,7 +119,7 @@ plotExp = false;
 % TODO: Valitse kaikki plotattavat tyypit graafiin, looppaa tyyppien yli
 yksiValtio("World");
 %yksiValtio("Finland");
-yksiValtio("United States");
+yksiValtio("New Zealand");
 %yksiValtio("Sweden");
 %yksiValtio("Hungary");
 
@@ -134,17 +134,14 @@ useSubPlot = true;
 subplot(2,1,1);
 moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotType,upperBound,useSubPlot);
 subplot(2,1,2);
-startDate = '2020-03-16';
+startDate = '2020-03-18';
 tyyppi = uudetKuolleet;
 upperBound = 14;
 moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotType,upperBound,useSubPlot);
 
-%% PART 2
-valtiot = ["Finland"];
-startDate = '2020-03-17';
-plotType = plotLinear;
+startDate = '2020-03-18';
 tyyppi = kaikkiSairaat;
-useSubPlot = true;
+figure;
 subplot(2,1,1);
 lowerX = -1;
 lowerY = -1;
@@ -152,8 +149,8 @@ upperY = -1;
 DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,lowerY,upperY,useSubPlot);
 tyyppi = kaikkiKuolleet;
 subplot(2,1,2);
-lowerX = 1;
-lowerY = -1;
+lowerX = 2;
+lowerY = 0;
 upperY = 20;
 DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,lowerY,upperY,useSubPlot);
 
@@ -172,7 +169,7 @@ plotType = plotExp;
 tyyppi = kaikkiSairaat;
 moniValtio(valtiot,tyyppi,startDate,plotType);
 tyyppi = kaikkiKuolleet;
-moniValtio(valtiot,tyyppi,startDate,plotType);
+moniValtio(valtiot,tyyppi,startDate,plotType,3e5);
 
 %% RUNNING P-DAY MEAN
 %valtiot = ["Finland","Sweden","Denmark","Iceland","Norway","Estonia","Latvia","Hungary","Netherlands","Belgium","Switzerland","Japan","Singapore","South Korea"];
@@ -195,7 +192,7 @@ plotType = plotExp;
 valtiot = ["United States","Brazil","Russia","India","United Kingdom","Chile","Spain","Italy","Iran","Mexico","Pakistan","France","Saudi Arabia","Colombia"];
 tyyppi = kaikkiSairaat;
 minimumCases = 100;
-afterNcases(valtiot,tyyppi,minimumCases,plotType);
+afterNcases(valtiot,tyyppi,minimumCases,plotType,2e7);
 minimumCases = 10;
 tyyppi = kaikkiKuolleet;
 afterNcases(valtiot,tyyppi,minimumCases,plotType,300000,6);
@@ -207,15 +204,15 @@ valtiot = ["Spain", "Qatar", "Bahrain", "Israel", "United States", "Brazil", "Pa
 plotType = plotLinear;
 minimumCases = 1;
 tyyppi = kaikkiSairaatPPM;
-afterNcases(valtiot,tyyppi,minimumCases,plotType,50000,18);
+afterNcases(valtiot,tyyppi,minimumCases,plotType,60000,18);
 % Bad data: Netherlands, Ireland, Iran, Iraq, Ecuador, Brazil
 tyyppi = kaikkiKuolleetPPM;
 valtiot = ["Peru", "Belgium", "United States", "Italy", "France", "Bolivia", "Spain", "Panama", "Colombia","Moldova","Sweden","Chile","India"];
 minimumCases = 1;
-afterNcases(valtiot,tyyppi,minimumCases,plotType,1100,37);
+afterNcases(valtiot,tyyppi,minimumCases,plotType,1500,50);
 
 %% PÄIVITTÄISET TAPAUKSET KOKONAISTAPAUSTEN FUNKTIONA, TASOITETTUNA
-valtiot = ["Finland","Brazil","Estonia","South Korea","Hungary","United States","Germany","Sweden","Russia","Spain","Italy","France","Chile","Japan"];
+valtiot = ["Finland","Brazil","Estonia","United Kingdom","Poland","United States","Germany","Sweden","Russia","Spain","Italy","France","Chile","Japan"];
 startDate = '2020-01-01';
 plotType = plotExp;
 tyyppi = kaikkiSairaat;
@@ -224,7 +221,7 @@ tyyppi = kaikkiKuolleet;
 DailyAndTotal(startDate,valtiot,tyyppi,plotType,10,1,3000);
 
 %% SAMA, VÄKILUKUA KOHDEN
-valtiot = ["Finland","Brazil","Estonia","South Korea","Hungary","United States","Germany","Sweden","Russia","Spain","Italy","France","Chile","Japan"];
+valtiot = ["Finland","Brazil","Estonia","United Kingdom","Poland","United States","Germany","Sweden","Russia","Spain","Italy","France","Chile","Japan"];
 startDate = '2020-03-10';
 plotType = plotExp;
 tyyppi = kaikkiSairaatPPM;
@@ -238,18 +235,20 @@ startDate = '2020-03-07';
 kuolleisuus(valtiot,startDate);
 
 %% SAIRASTUNEIDEN OSUUS TESTATUISTA
-% Anomaalista dataa: Sweden, France, Brazil, Germany, Japan, Spain,
-% Argentina, Peru, Colombia
+% Anomaalista dataa: Sweden, France, Brazil, Germany, Japan, Spain, Turkey,
+% Switzerland, Argentina, Peru, Colombia, Poland, Russia, India, South Africa
+% South Korea, Norway, Denmark, Hungary, Switzerland, Israel, Slovenia,
+% Canada, Serbia, Greece
 
-% Ongelma! Pitää tasoittaa...
-startDate = '2020-03-20';
-valtiot = ["Finland","Estonia","Hungary","Italy","United Kingdom","India","Spain","Switzerland","Turkey","Belgium","Russia","Israel","United States","South Africa"];
+startDate = '2020-03-13';
+valtiot = ["Finland","Estonia","Italy","United Kingdom","Belgium","United States","Romania","Bulgaria","Iceland","Netherlands","Portugal","Croatia","Czechia","Austria"];
+%valtiot = "Austria";
 SairasOsuus(valtiot,startDate);
 
 
 %% VERRATAAN PÄIVITTÄIN KUOLLEITA SAIRASTUNEIDEN OSUUTEEN TESTATUISTA
 
-valtiot = "Finland";
+valtiot = ["Finland"];
 startDate = '2020-03-24';
 plotType = plotLinear;
 useSubPlot = true;
@@ -257,24 +256,16 @@ tyyppi = uudetKuolleetTAS;
 subplot(2,1,2);
 moniValtio(valtiot,tyyppi,startDate,plotType,15,useSubPlot);
 subplot(2,1,1);
-%SairasOsuus(valtiot,startDate)
+SairasOsuus(valtiot,startDate)
 
-tyyppi = 20;
-p = 7;
-moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotType,100,useSubPlot);
-
-%% TESTAUSTA (onko 20 positive_rate? Ehkä 24 todennäköisemmin kun on < 1
-plotType = plotExp;
-moniValtio("Hungary",24,'2020-03-22',plotType);
-
-%%
+%% TOINEN DERIVAATTA
 tyyppi = uudetSairaatTAS;
 startDate = '2020-03-01';
 SecondDerivative(7,"Finland",tyyppi,startDate);
-
+tyyppi = uudetSairaat;
+SecondDerivative(7,"World",tyyppi);
 tyyppi = uudetKuolleet;
 SecondDerivative(7,"World",tyyppi);
-
 
 %%
 %%%%%%%%%% HERE EXPERIMENTAL STUFF %%%%%%%%%%
@@ -284,3 +275,7 @@ SecondDerivative(7,"World",tyyppi);
 % t0 = cputime;
 % kaikkiPaivat = laskePaivat();
 % fprintf(' ready. (%.2f s)\n', cputime-t0);
+%
+%
+%plotType = plotExp;
+%moniValtio("Hungary",20,'2020-03-22',plotType);
