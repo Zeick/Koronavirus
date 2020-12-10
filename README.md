@@ -5,7 +5,7 @@ Data Source: https://github.com/owid/covid-19-data/tree/master/public/data
 
 ## Main file and interesting functions
 
-* CoronaMaailma.m - downloads the data, demonstrates the functions and produces the most important plots.
+* CoronaMaailma.m - **Main file.** Downloads the data, demonstrates the functions and produces the most important plots.
 * afterNcases.m - produces the plot after a specific number has been achieved for a statistic.
 * DailyAndTotal.m - produces a plot, where the total statistic is on horizontal axis and the daily statistic on vertical axis
 * moniValtio.m - produces a plot for several countries. Legend is included if less than 15 countries are inserted.
@@ -18,3 +18,4 @@ Data Source: https://github.com/owid/covid-19-data/tree/master/public/data
 
 * laskePaivat.m - Counts the dates.
 * laskeValtiot.m - Counts the countries. Note that there are also non-countries and continents included in the data, like "World".
+* LogNormalTest.m - A test script, demonstrates how we may fit a lognormal distribution to data.
