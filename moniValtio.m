@@ -28,7 +28,7 @@ function moniValtio(valtiot,tyyppi,startDate,plotLinear,upperBound,useSubPlot)
         lkm = [];
         for j=2:nl
             temp = C{j}(kaikkiValtiot);
-            if valtio == string(temp{1}) && length(C{j}) >= tyyppi
+            if valtio == string(temp{1}) && size(C{j},2) >= tyyppi
                 t2 = datetime(string(C{j}(paivat)),'InputFormat','yyyy-MM-dd');
                 lkm2   = str2double(string(C{j}(tyyppi)));
                 t = [t t2];

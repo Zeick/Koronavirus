@@ -1,5 +1,5 @@
 % GET NUMBER OF DAILY/TOTAL INFECTIONS/DEATHS FROM MULTIPLE COUNTRIES
-function DailyAndTotal(startDate,valtiot,tyyppi,plotLinear,lowerBoundX,lowerBoundY,upperBoundY,useSubPlot)
+function DailyAndTotal(startDate,valtiot,tyyppi,plotLinear,lowerBoundX,upperBoundX,lowerBoundY,upperBoundY,useSubPlot)
     global C;
     global nl;
     global kaikkiValtiot;
@@ -8,7 +8,7 @@ function DailyAndTotal(startDate,valtiot,tyyppi,plotLinear,lowerBoundX,lowerBoun
     cpuStart = cputime;
     if nargin < 4
         plotLinear = false;
-    elseif nargin < 8
+    elseif nargin < 9
         useSubPlot = false;
     end
     first = true;
@@ -74,7 +74,10 @@ function DailyAndTotal(startDate,valtiot,tyyppi,plotLinear,lowerBoundX,lowerBoun
     if upperBoundY == -1
         upperBoundY = 1.1*maxLKM;
     end
-    xlim([lowerBoundX, totLKM]);
+    if upperBoundX == -1
+        upperBoundX = totLKM;
+    end
+    xlim([lowerBoundX upperBoundX]);
     ylim([lowerBoundY upperBoundY]);
     legend(valtiot,'Location','NorthWest'); 
     title(otsikot(tyyppi),'FontSize',20);
