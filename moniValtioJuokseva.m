@@ -45,9 +45,11 @@ function moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotLinear,upperBound,use
             temp = C{j}(kaikkiValtiot);
             if valtio == string(temp{1}) && length(C{j}) >= tyyppi
                 t2 = datetime(string(C{j}(paivat)),'InputFormat','yyyy-MM-dd');
-                lkm2  = str2double(string(C{j}(tyyppi)));
-                t = [t t2];
-                lkm = [lkm lkm2];
+                if t2 >= datetime(startDate)
+                    lkm2  = str2double(string(C{j}(tyyppi)));
+                    t = [t t2];
+                    lkm = [lkm lkm2];
+                end
             end
         end
 

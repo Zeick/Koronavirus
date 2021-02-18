@@ -128,17 +128,17 @@ plotExp = false;
 
 %% GET DATA FROM ONE COUNTRY
 % TODO: Valitse kaikki plotattavat tyypit graafiin, looppaa tyyppien yli
-%yksiValtio("World");
+yksiValtio("World");
 %yksiValtio("Finland");
 %yksiValtio("New Zealand");
 %yksiValtio("Sweden");
 yksiValtio("Hungary");
 
-%% ONE COUNTRY SUMMARY, PART 1
-valtiot = ["Finland"];
+%% COUNTRY SUMMARY
+valtiot = ["Finland","Norway","Hungary"];
 startDate = '2020-02-20';
 plotType = plotLinear;
-tyyppi = uudetSairaat;
+tyyppi = uudetSairaatPPM;
 p = 7;
 upperBound = -1; % Tarkoittaa että otetaan oletus 1.1*maxLKM käyttöön
 useSubPlot = true;
@@ -146,24 +146,26 @@ subplot(2,1,1);
 moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotType,upperBound,useSubPlot);
 subplot(2,1,2);
 startDate = '2020-03-24';
-tyyppi = uudetKuolleet;
-upperBound = 14;
+tyyppi = uudetKuolleetPPM;
+upperBound = -1;
 moniValtioJuokseva(p,valtiot,tyyppi,startDate,plotType,upperBound,useSubPlot);
-
+%%
 startDate = '2020-03-24';
-tyyppi = kaikkiSairaat;
+tyyppi = kaikkiSairaatPPM;
 figure;
 subplot(2,1,1);
 lowerX = -1;
+upperX = -1;
 lowerY = -1;
 upperY = -1;
-DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,lowerY,upperY,useSubPlot);
-tyyppi = kaikkiKuolleet;
+DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,upperX,lowerY,upperY,useSubPlot);
+tyyppi = kaikkiKuolleetPPM;
 subplot(2,1,2);
 lowerX = 2;
+upperX = -1;
 lowerY = 0;
-upperY = 20;
-DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,lowerY,upperY,useSubPlot);
+upperY = -1;
+DailyAndTotal(startDate,valtiot,tyyppi,plotType,lowerX,upperX,lowerY,upperY,useSubPlot);
 
 
 %% GET NUMBER OF DAILY/TOTAL INFECTIONS/DEATHS FROM MULTIPLE COUNTRIES
@@ -217,8 +219,8 @@ valtiot = ["Spain", "Qatar", "Bahrain", "Israel", "United States", "Brazil", "Pa
 plotType = plotLinear;
 minimumCases = 1;
 tyyppi = kaikkiSairaatPPM;
-afterNcases(valtiot,tyyppi,minimumCases,plotType,8e4,18);
-% Bad data: Netherlands, Ireland, Iran, Iraq, Ecuador, Brazil
+afterNcases(valtiot,tyyppi,minimumCases,plotType,1e5,18);
+%% Bad data: Netherlands, Ireland, Iran, Iraq, Ecuador, Brazil
 tyyppi = kaikkiKuolleetPPM;
 valtiot = ["Peru", "Belgium", "United States", "Italy", "France", "Bolivia", "Spain", "Panama", "Colombia","Moldova","Sweden","Chile","India"];
 minimumCases = 1;
@@ -293,8 +295,8 @@ SecondDerivative(7,"World",tyyppi);
 %% ROKOTETUT (ei toimi, data on anomaalista!)
 valtiot = ["Finland","Estonia","Italy","United Kingdom","Belgium","United States","Romania","Iceland","Croatia","Austria"];
 tyyppi = 34;
-startDate = '2020-12-01';
-plotType = plotLinear;
+startDate = '2021-01-01';
+plotType = plotExp;
 useSubPlot = false;
 moniValtio(valtiot,tyyppi,startDate,plotType);
 
